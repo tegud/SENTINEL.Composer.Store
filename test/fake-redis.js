@@ -30,6 +30,9 @@ module.exports = {
 			set: function(key, value) {
 				store[key] = value;
 			},
+			lpush: function(key, value) {
+				(store[key] = store[key] || []).push(value);
+			},
 			expire: function(key, timeout) {
 				if(expiries[key]) {
 					clearTimeout(expiries[key]);

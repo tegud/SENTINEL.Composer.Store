@@ -57,7 +57,10 @@ describe('SENTINEL.Composer.Store', function() {
 			eventEmitter = new EventEmitter();
 		});
 
+		var sendTimeout;
+
 		afterEach(function(done) {
+			clearTimeout(sendTimeout);
 			udpClient.close();
 			eventEmitter.removeAllListeners();
 
@@ -72,7 +75,7 @@ describe('SENTINEL.Composer.Store', function() {
 
 			udpClient.send(message, 0, message.length, port, "localhost", function() {
 				if(testData.length) {
-					setTimeout(function() {
+					sendTimeout = setTimeout(function() {
 						sendTest(testData, gapBetween);
 					}, gapBetween);
 				}
