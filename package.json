@@ -23,7 +23,7 @@
   "dependencies": {
     "amqp": "^0.2.0",
     "bluebird": "^2.1.2",
-    "lodash": "^2.4.1",
+    "lodash": "^3.9.3",
     "moment": "^2.6.0",
     "redis": "^0.10.3"
   }

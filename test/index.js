@@ -4,9 +4,12 @@ var dgram = require('dgram');
 var EventEmitter = require('events').EventEmitter;
 var Promise = require('bluebird');
 var fs = require('fs');
+var fakeRedis = require('./fake-redis');
 var Server = proxyquire('../lib/server', {
-	'./stores/redis': proxyquire('../lib/stores/redis', {
-		'redis': require('./fake-redis')
+	'./config': proxyquire('../lib/config', {
+		'../stores/redis': proxyquire('../lib/stores/redis', {
+			'redis': fakeRedis
+		})
 	})
 });
 var _ = require('lodash');
@@ -36,9 +39,7 @@ describe('SENTINEL.Composer.Store', function() {
 					{
 						type: 'session',
 						subscribedTypes: ['lr_varnish_request', 'domain_events', 'lr_errors', 'paymentprocessor_logging'],
-						keyFunction: function(data) { 
-							return data['sessionId'] || (data['data'] == undefined ? undefined : data['data']['TLRGSessionId']); 
-						},
+						key: ['sessionId', 'data.TLRGSessionId'],
 						store: {
 							name: 'redis',
 							maxInactivity: '1second',
